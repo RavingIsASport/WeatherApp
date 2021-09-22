@@ -9,3 +9,6 @@ The One Call API provides the following weather data for any geographical coordi
 * National weather alerts
 * Historical weather data for the previous 5 days
 ## Deployed
+https://ravingisasport.github.io/WeatherApp/
+## Deployed ScreenShot
+![C26473B5-3DA2-4FE8-A048-A7F377E341F0](https://user-images.githubusercontent.com/87382254/134417710-9229179c-dbf8-41d1-84a7-9089f51323fa.jpeg)
