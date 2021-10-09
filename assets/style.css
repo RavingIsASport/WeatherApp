@@ -1,16 +1,12 @@
-.navbar-brand {
-    font-size: 36px;
+:root{
+    --main-Color:#81B214;
+    --second-color:#206A5D;
+    --thirs-color: #FFCC29;
 }
 
-.search-header {
-    font-size: 24px;
-    font-weight: bold;
+#searchBtn{
+    background-color: var(--main-Color);
 }
-
-.city-name {
-    font-size: 30px;
-}
-
-.forecast-date {
-    font-size: 18px;
+.title {
+    color: var(--second-color);
 }
