@@ -11,3 +11,4 @@ The One Call API provides the following weather data for any geographical coordi
 ## Deployed
 https://ravingisasport.github.io/WeatherApp/
 ## Deployed ScreenShot
+<img width="998" alt="Screen Shot 2021-10-09 at 2 31 41 PM" src="https://user-images.githubusercontent.com/87382254/136671743-7476e164-41be-4850-afae-46c68bdbe4b5.png">
