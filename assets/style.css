@@ -4,7 +4,7 @@
     --thirs-color: #FFCC29;
 }
 
-#searchBtn{
+#searchBtn{ 
     background-color: var(--main-Color);
 }
 .title {
