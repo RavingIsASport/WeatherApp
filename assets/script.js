@@ -7,7 +7,6 @@ const style = document.createElement("style");
 
 submitBtn.addEventListener("click", () => {
   let city = cityInput.value;
-  cityName.innerText = city;
   let cityData =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
     city +
@@ -18,7 +17,9 @@ submitBtn.addEventListener("click", () => {
     })
     .then((data) => {
       console.log(data);
-      let temp = data.main.temp;
+      let name = data.name;
+      let temp = data.main.temp.toFixed();
+      cityName.innerHTML = name;
       cityTemp.innerText = temp + " °F";
     });
   style.innerHTML = `.weather{
@@ -28,4 +29,5 @@ submitBtn.addEventListener("click", () => {
 
   }`;
   document.head.appendChild(style);
+  cityInput.value = "";
 });
