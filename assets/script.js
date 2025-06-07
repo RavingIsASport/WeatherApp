@@ -1,65 +1,116 @@
-let cityInput = document.querySelector(".searchInput");
-let submitBtn = document.querySelector(".submitBtn");
-let cityName = document.querySelector(".city");
-let cityTemp = document.querySelector(".temp");
-let weatherBox = document.querySelector(".weatherBox");
-const style = document.createElement("style");
-const currentTime = document.querySelector(".currentTime");
-const icon = document.querySelector(".icon");
-const currentCond = document.querySelector(".condition");
+let city = document.getElementById("cityInput");
+let locationForm = document.getElementById("locationForm");
+let locationTitle = document.getElementById("locationTitle");
+let temperature = document.getElementById("temperature");
+let discription = document.getElementById("description");
+let weatherIcon = document.getElementById("weatherIcon");
+let latitude;
+let longitude;
+let apiKey = "2110a84465cff74a4b71fd103faeab7d";
 
-let update = () => {
-  currentTime.innerHTML = moment().format("LTS");
-};
+// get current time
+function updateClock() {
+  const now = moment().format("dddd, MMMM Do YYYY, h:mm:ss A");
+  document.getElementById("clock").textContent = now;
+}
 
-setInterval(update, 1000);
+setInterval(updateClock, 1000);
+updateClock();
 
-submitBtn.addEventListener("click", () => {
-  let city = cityInput.value;
-  let cityGio =
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
-    city +
-    "&appid=cf3316e2f45034e3bc3a7f8bd6e953de";
+// check if the browser supports geolocation and set user's location weather
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      console.log("Latitude:", latitude, "Longitude:", longitude);
+      // Use these values in your weather API call
+      getWeather(latitude, longitude);
+    },
+    (error) => {
+      console.error("Error getting location:", error);
+    }
+  );
+} else {
+  console.error("Geolocation is not supported by this browser.");
+}
 
-  fetch(cityGio)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      let lat = data[0].lat;
-      let lon = data[0].lon;
-      let name = data[0].name;
-      cityName.innerHTML = name;
-      let cityData =
-        "https://api.openweathermap.org/data/2.5/onecall?lat=" +
-        lat +
-        "&lon=" +
-        lon +
-        "&appid=cf3316e2f45034e3bc3a7f8bd6e953de&units=imperial";
-      fetch(cityData)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          let temp = data.current.temp.toFixed();
-          cityTemp.innerText = temp + "°F";
-          icon.src =
-            "http://openweathermap.org/img/wn/" +
-            data.current.weather[0].icon +
-            "@2x.png";
-          let descript = data.current.weather[0].description;
-          currentCond.innerHTML = descript;
-        });
-    });
-
-  style.innerHTML = `.weather{
-      background:rgba(0,0,0, 0.2);
-      border-radius: 5px;
-      padding:5px
-
-  }`;
-  document.head.appendChild(style);
-
-  cityInput.value = "";
+// function to handle the search button click
+locationForm.addEventListener("submit", (e) => {
+  e.preventDefault(); // Prevent the form from submitting and refreshing the page
+  let cityName = city.value.trim();
+  if (cityName) {
+    searchWeather(cityName);
+    city.value = ""; // Clear the input field after search
+  } else {
+    alert("Please enter a city name.");
+  }
 });
+
+// set icon group based on weather ID
+function getWeatherIcon(weatherId) {
+  let iconGroup;
+  if (weatherId >= 200 && weatherId < 300) {
+    iconGroup = "wi wi-thunderstorm text-yellow-400";
+  } else if (weatherId >= 300 && weatherId < 400) {
+    iconGroup = "wi wi-sprinkle text-blue-400";
+  } else if (weatherId >= 500 && weatherId < 600) {
+    iconGroup = "wi wi-rain text-blue-400";
+  } else if (weatherId >= 600 && weatherId < 700) {
+    iconGroup = "wi wi-snow text-white";
+  } else if (weatherId === 800) {
+    iconGroup = "wi wi-day-sunny text-yellow-400";
+  } else if (weatherId > 800) {
+    iconGroup = "wi wi-cloudy text-gray-400";
+  }
+  weatherIcon.className = iconGroup + " text-8xl mt-4";
+}
+
+// function to update UI with city weather
+function changeUI(weatherData) {
+  locationTitle.innerText = `${weatherData.name}`;
+  temperature.innerText = `${Math.round(weatherData.main.temp)}°F`;
+  discription.innerText = `${weatherData.weather[0].description}`;
+}
+
+// Function to fetch weather data for a geolocation
+async function getWeather(lat, long) {
+  try {
+    let geoWeather = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${apiKey}&units=imperial`
+    );
+    // jsonify the response
+    geoWeather = await geoWeather.json();
+    console.log(geoWeather);
+
+    // Update the UI with the fetched weather data
+    changeUI(geoWeather);
+
+    // Set the weather icon based on the fetched data
+    let weatherId = geoWeather.weather[0].id;
+    getWeatherIcon(weatherId);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+  }
+}
+
+// Function to handle the search button click
+async function searchWeather(cityName) {
+  try {
+    let cityWeather = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=imperial`
+    );
+    // jsonify the response
+    cityWeather = await cityWeather.json();
+    console.log(cityWeather);
+
+    // Update the UI with the fetched weather data
+    changeUI(cityWeather);
+
+    // Set the weather icon based on the fetched data
+    let weatherId = cityWeather.weather[0].id;
+    getWeatherIcon(weatherId);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+  }
+}

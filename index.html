@@ -5,10 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script
-      src="https://kit.fontawesome.com/f5b8a481ad.js"
-      crossorigin="anonymous"
-    ></script>
+    <!-- Weather Icons CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css"
+    />
+
+    <!-- moment.js for date formatting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <link rel="stylesheet" href="./assets/style.css" />
     <meta
@@ -18,36 +21,41 @@
 
     <title>Weather App</title>
   </head>
-  <body>
-    <div class="grid md:grid-cols-3 justify-center">
-      <div class="justify-self-center md:pl-6 pt-6">
-        <h2 class="currentTime text-3xl font-mono"></h2>
-      </div>
-      <div class="py-6 justify-self-center">
-        <h1 class="text-4xl font-mono">Weather App</h1>
-      </div>
+  <body class="bg-gradient-to-br from-blue-400 to-indigo-600">
+    <div class="text-center mt-4">
+      <p id="clock" class="text-2xl font-mono"></p>
     </div>
-    <div>
-      <div class="flex justify-center gap-2">
-        <input
-          type="text"
-          placeholder="City"
-          class="searchInput bg-white border-solid border-1 border-black rounded-lg p-1 focus:outline-none focus:ring focus:ring-green-300"
-        />
-        <button
-          type="submit"
-          class="submitBtn bg-green-400 border-1 border-solid border-black p-2 rounded-lg"
+    <div
+      class="min-h-screen flex flex-col items-center justify-center text-white font-sans"
+    >
+      <h1 class="text-4xl font-bold mb-6">Weatherly 🌤️</h1>
+
+      <div class="flex mb-4">
+        <form
+          id="locationForm"
+          class="flex items-center bg-white rounded-lg shadow-lg"
         >
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+          <input
+            id="cityInput"
+            type="text"
+            placeholder="Enter city"
+            class="px-4 py-2 rounded-l-lg border border-transparent focus:outline-none text-gray-800"
+          />
+          <button
+            type="submit"
+            id="searchButton"
+            class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 px-4 py-2 rounded-r-lg font-semibold"
+          >
+            Search
+          </button>
+        </form>
       </div>
-      <div class="flex justify-center content-evenly mt-8">
-        <div class="weather font-mono">
-          <p class="city text-3xl px-8 pt-4"></p>
-          <img class="icon px-8" alt="" />
-          <p class="temp text-4xl px-8"></p>
-          <p class="condition text-xl px-8 py-5"></p>
-        </div>
+      <!-- show weather card -->
+      <div class="text-center">
+        <h2 id="locationTitle" class="text-2xl font-semibold mb-2"></h2>
+        <p id="temperature" class="text-6xl font-bold mb-2"></p>
+        <p id="description" class="text-lg italic"></p>
+        <i id="weatherIcon" class=""></i>
       </div>
     </div>
   </body>
